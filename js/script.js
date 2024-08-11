@@ -2,10 +2,15 @@ var p1Score = 0, p2Score = 0;
 var score = 0;
 const winningScore = 5;
 
+let start = document.querySelector('.startMessage');
 let p1displayScore = document.querySelector('.p1Score');
 let p2displayScore = document.querySelector('.p2Score');
+let winnerMsg = document.querySelector('.winnerMsg');
 
 
+let plyBtn = document.querySelector('.playBtn');
+
+plyBtn.addEventListener('click', play);
 //play();
 
 // if(p1Score > p2Score){
@@ -15,18 +20,18 @@ let p2displayScore = document.querySelector('.p2Score');
 //     alert("Player 2 Wins!");
 // }
 
-function play() {
-    while(score < winningScore ) {
-        let player1move = getMove(parseInt(prompt("What is your move? \nPress 1 for ROCK\n2 for PAPER\n3 for SCISSOR")));
-        console.log("Player 1 : " + player1move);
+// function play() {
+//     while(score < winningScore ) {
+//         let player1move = getMove(parseInt(prompt("What is your move? \nPress 1 for ROCK\n2 for PAPER\n3 for SCISSOR")));
+//         console.log("Player 1 : " + player1move);
 
-        let player2move = getMove(Math.max(1, Math.floor(Math.random() * 4)));
-        console.log("Player 2 : " + player2move);
+//         let player2move = getMove(Math.max(1, Math.floor(Math.random() * 4)));
+//         console.log("Player 2 : " + player2move);
 
-        compareMove(player1move, player2move);
-        score = getHighScore(p1Score, p2Score);
-    }
-}
+//         compareMove(player1move, player2move);
+//         score = getHighScore(p1Score, p2Score);
+//     }
+// }
 
 function getMove(randomNum) {
     // random number for player moves 
@@ -123,77 +128,57 @@ function getHighScore(p1_score, p2_score){
 
     console.log("Highest score between two players : " , highScore);
     return highScore;
-
 }
 
-const rpsBtn = document.querySelectorAll('.rps');
+
+function play(){
+    start.remove();
+    const rpsBtn = document.querySelectorAll('.rps');
 const gameContainer = document.querySelector('.gameContainer');
-// const playerMoveContainer = document.querySelector('.playerMoves');
 const playerMoveContainer = document.createElement('div');
 playerMoveContainer.className = "playerMoves";
 
+        for(let i = 0; i < rpsBtn.length; i++){
+            console.log(i);
+            rpsBtn[i].addEventListener('click', (event) => {
+                if(rpsBtn[i] == event.target){
+        
+                    let playerMoveContainer = document.createElement('div');
+                    playerMoveContainer.className = "playerMoves";
+        
+                    console.log(event);
+        
+                    let player1move = p1Move(playerMoveContainer, event.target);
+                    vs(playerMoveContainer);
+                    let player2move = p2Move(playerMoveContainer);
+        
+                    compareMove(player1move, player2move, playerMoveContainer);
+                    ;
+                    
+                    let hr = document.createElement('hr');
+                    
+                    gameContainer.appendChild(playerMoveContainer);
+                    gameContainer.appendChild(hr);
 
+                    score = getHighScore(p1Score, p2Score)
 
-// // get div with class="player1" to display player 1 move
-// const p1moveContainer = document.querySelector('.player1');
-// // get div with class="mid" to display "VS"
-// const vsContainer = document.querySelector('.vs');
-// // get div with class="player2" to display player 2 move
-// const p2moveContainer = document.querySelector('.player2');
-
-
-
-for(let i = 0; i < rpsBtn.length; i++){
-    console.log(i);
-    rpsBtn[i].addEventListener('click', (event) => {
-        if(rpsBtn[i] == event.target){
-
-            let playerMoveContainer = document.createElement('div');
-            playerMoveContainer.className = "playerMoves";
-
-            // get div with class="player1" to display player 1 move
-            const p1moveContainer = document.createElement('div');
-            // get div with class="mid" to display "VS"
-            const vsContainer = document.createElement('div');
-            // get div with class="player2" to display player 2 move
-            const p2moveContainer = document.createElement('div');
-
-            gameContainer.appendChild(playerMoveContainer);
-            // playerMoveContainer.appendChild(p1moveContainer);
-            // playerMoveContainer.appendChild(vsContainer);
-            // playerMoveContainer.appendChild(p2moveContainer);
-
-            // create container to display player1 move
-            // let p1move = document.createElement('div');
-            // p1moveContainer.appendChild(p1move);
-
-            // let result = document.createElement('p');
-            // result.textContent = event.target.innerText;
-            console.log(event);
-            // p1move.appendChild(result);
-
-            // p1moveContainer.appendChild(result);
-            // playerMoveContainer.appendChild(p1moveContainer);
-
-            // vsContainer.appendChild(vs());
-            // p2moveContainer.appendChild(p2Move());
-
-            let player1move = p1Move(playerMoveContainer, event.target);
-            vs(playerMoveContainer);
-            let player2move = p2Move(playerMoveContainer);
-
-            compareMove(player1move, player2move, playerMoveContainer);
-            score = getHighScore(p1Score, p2Score);
-            
-            
-
-            let hr = document.createElement('hr');
-
-            gameContainer.appendChild(hr);
-
+                    if(score == winningScore){
+                        if(p1Score > p2Score){
+                            winnerMsg.textContent = "Player 1 Wins!";
+                            alert("Player 1 Wins!");
+                        }
+                        else{
+                            winnerMsg.textContent = "Player 2 Wins!";
+                            alert("Player 2 Wins!");
+                        }
+                        window.location.reload(30000);
+                        // location.reload();
+                    }
+                }
+            });
         }
-    });
 }
+
 console.log(rpsBtn.length);
 console.log(rpsBtn[2].innerText);
 
